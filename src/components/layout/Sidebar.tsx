@@ -1,3 +1,4 @@
+
 import { Home, MessageSquare, Play, Wand2, Music, BookOpen, Sparkles, Radio, Bell, Bolt, User, ChevronDown, Plus, ChevronsLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NavLink } from 'react-router-dom';
@@ -16,6 +17,7 @@ const Sidebar = () => {
     products: [
       { icon: BookOpen, label: 'Studio', href: '/app/studio', end: true },
       { icon: Sparkles, label: 'Dubbing', href: '#', end: false },
+      { icon: Radio, label: 'Conversational AI', href: '/app/conversational-ai', end: true },
     ],
   };
 
