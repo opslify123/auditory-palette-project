@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
+import { Download } from 'lucide-react';
 
 const TTS_Content = () => {
     const [text, setText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [audioContent, setAudioContent] = useState<string | null>(null);
     const { toast } = useToast();
 
     const handleGenerateSpeech = async () => {
@@ -22,6 +24,7 @@ const TTS_Content = () => {
         }
 
         setIsLoading(true);
+        setAudioContent(null);
 
         try {
             const { data, error } = await supabase.functions.invoke('text-to-speech', {
@@ -32,6 +35,7 @@ const TTS_Content = () => {
             if (data.error) throw new Error(data.error);
 
             if (data.audioContent) {
+                setAudioContent(data.audioContent);
                 const audio = new Audio(`data:audio/mpeg;base64,${data.audioContent}`);
                 audio.play();
             } else {
@@ -47,6 +51,28 @@ const TTS_Content = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleDownload = () => {
+        if (!audioContent) return;
+
+        const byteCharacters = atob(audioContent);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'audio/mpeg' });
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'speech.mp3';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
     };
 
     return (
@@ -77,21 +103,38 @@ const TTS_Content = () => {
                     placeholder="Start typing here or paste any text you want to turn into lifelike speech..."
                     className="flex-1 w-full p-4 bg-transparent border-0 text-lg resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={(e) => {
+                        setText(e.target.value);
+                        if (audioContent) {
+                            setAudioContent(null);
+                        }
+                    }}
                 />
 
                 <div className="mt-auto pt-4 flex items-center justify-between">
                     <div>
                         {/* Placeholder for credits */}
                     </div>
-                    <Button 
-                        size="lg" 
-                        onClick={handleGenerateSpeech} 
-                        disabled={isLoading || !text.trim()}
-                        className="bg-white text-black hover:bg-gray-200 disabled:bg-gray-300 disabled:text-black"
-                    >
-                        {isLoading ? 'Generating...' : 'Generate speech'}
-                    </Button>
+                    <div className="flex items-center space-x-2">
+                        {audioContent && !isLoading && (
+                            <Button 
+                                size="lg" 
+                                variant="outline"
+                                onClick={handleDownload}
+                            >
+                                <Download className="mr-2 h-4 w-4" />
+                                Download
+                            </Button>
+                        )}
+                        <Button 
+                            size="lg" 
+                            onClick={handleGenerateSpeech} 
+                            disabled={isLoading || !text.trim()}
+                            className="bg-white text-black hover:bg-gray-200 disabled:bg-gray-300 disabled:text-black"
+                        >
+                            {isLoading ? 'Generating...' : 'Generate speech'}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
