@@ -16,7 +16,7 @@ const SettingsPanel = () => {
                 <div>
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">Voice</h3>
                     <Button variant="outline" className="w-full justify-between items-center bg-secondary">
-                        <span>Rachel</span>
+                        <span>Sarah</span>
                         <ChevronRight className="h-4 w-4" />
                     </Button>
                 </div>
