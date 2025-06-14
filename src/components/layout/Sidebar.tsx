@@ -24,7 +24,7 @@ const Sidebar = () => {
     <aside className="w-64 bg-[#19191D] text-white p-4 flex-col hidden md:flex">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center">
-            <span className="text-xl font-bold">IIElevenLabs</span>
+            <span className="text-xl font-bold">Opslify AI</span>
         </div>
         <Button variant="ghost" size="icon">
             <ChevronsLeftRight className="h-4 w-4" />
