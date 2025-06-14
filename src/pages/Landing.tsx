@@ -22,7 +22,7 @@ const LandingPage = () => {
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">Convert Text to Realistic Speech Instantl</h1>
+                  <h1 className="text-3xl font-bold tracking-tighter xl:text-6xl/none text-left sm:text-6xl">Convert Text to Realistic Speech Instantl</h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     Our advanced text-to-speech technology creates natural-sounding audio for your projects. Perfect for videos, podcasts, and accessibility.
                   </p>
@@ -33,7 +33,7 @@ const LandingPage = () => {
                   </Button>
                 </div>
               </div>
-              <img alt="Hero" className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square" src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800" />
+              
             </div>
           </div>
         </section>
