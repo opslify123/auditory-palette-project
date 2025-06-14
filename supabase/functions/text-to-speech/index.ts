@@ -14,6 +14,17 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  if (!ELEVENLABS_API_KEY) {
+    console.error('Error: ELEVENLABS_API_KEY is not set in the Supabase environment secrets.')
+    return new Response(
+      JSON.stringify({ error: 'Server configuration error: The API key is missing.' }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+
   try {
     const { text, voiceId } = await req.json()
 
@@ -21,14 +32,13 @@ serve(async (req) => {
       throw new Error('Text is required')
     }
     
-    // Default to Sarah's voice if not provided from the client
     const selectedVoiceId = voiceId || 'EXAVITQu4vr4xnSDxMaL'; // Sarah's Voice ID
 
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'xi-api-key': ELEVENLABS_API_KEY!,
+        'xi-api-key': ELEVENLABS_API_KEY,
       },
       body: JSON.stringify({
         text: text,
@@ -43,7 +53,18 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('ElevenLabs API error:', errorText)
-      throw new Error(`ElevenLabs API error: ${response.statusText} - ${errorText}`)
+      let errorMessage = `ElevenLabs API error: ${response.statusText}`
+      try {
+        const errorJson = JSON.parse(errorText)
+        if (errorJson.detail?.message) {
+          errorMessage = errorJson.detail.message
+        } else {
+          errorMessage = `ElevenLabs API error: ${response.statusText} - ${errorText}`
+        }
+      } catch (e) {
+        errorMessage = `ElevenLabs API error: ${response.statusText} - ${errorText}`
+      }
+      throw new Error(errorMessage)
     }
 
     const audioBlob = await response.blob()
