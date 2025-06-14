@@ -1,5 +1,6 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY')
 
@@ -24,6 +25,11 @@ serve(async (req) => {
       }
     )
   }
+
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+  )
 
   try {
     const { text, voiceId } = await req.json()
@@ -68,8 +74,35 @@ serve(async (req) => {
     }
 
     const audioBlob = await response.blob()
-    const audioBuffer = await audioBlob.arrayBuffer()
 
+    // Upload to storage and save history
+    const fileName = `speech_${Date.now()}.mp3`;
+    const { error: uploadError } = await supabase.storage
+      .from('audio_files')
+      .upload(fileName, audioBlob, {
+        contentType: 'audio/mpeg',
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Storage upload error:', uploadError.message);
+    } else {
+      const { data: urlData } = supabase.storage
+        .from('audio_files')
+        .getPublicUrl(fileName);
+
+      if (urlData.publicUrl) {
+        const { error: historyError } = await supabase
+          .from('speech_history')
+          .insert({ text: text, audio_url: urlData.publicUrl });
+
+        if (historyError) {
+          console.error('Error saving to history:', historyError.message);
+        }
+      }
+    }
+
+    const audioBuffer = await audioBlob.arrayBuffer()
     const base64Audio = btoa(
       String.fromCharCode(...new Uint8Array(audioBuffer))
     )
