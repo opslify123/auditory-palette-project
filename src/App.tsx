@@ -13,6 +13,7 @@ import LandingPage from "./pages/Landing";
 import AppLayout from "./components/layout/AppLayout";
 import Studio from "./pages/Studio";
 import ConversationalAI from "./pages/ConversationalAI";
+import Feedback from "./pages/Feedback";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
               <Route index element={<Index />} />
               <Route path="studio" element={<Studio />} />
               <Route path="conversational-ai" element={<ConversationalAI />} />
+              <Route path="feedback" element={<Feedback />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

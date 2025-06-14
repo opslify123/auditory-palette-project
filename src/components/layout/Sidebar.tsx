@@ -1,5 +1,5 @@
 
-import { Home, MessageSquare, Play, Wand2, Music, BookOpen, Sparkles, Radio, Bell, Bolt, User, ChevronDown, Plus, ChevronsLeftRight } from 'lucide-react';
+import { Home, MessageSquare, Play, Wand2, Music, BookOpen, Sparkles, Radio, Bell, Bolt, User, ChevronDown, Plus, ChevronsLeftRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NavLink } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ const Sidebar = () => {
     main: [
       { icon: Home, label: 'Home', href: '/app', end: true },
       { icon: MessageSquare, label: 'Voices', href: '#', end: false },
+      { icon: Star, label: 'Feedback', href: '/app/feedback', end: true },
     ],
     playground: [
       { icon: Play, label: 'Text to Speech', href: '/app', end: true },
