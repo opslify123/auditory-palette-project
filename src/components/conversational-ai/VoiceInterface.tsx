@@ -1,12 +1,10 @@
 
-import { useState } from "react";
 import { useConversation } from "@11labs/react";
 import { Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VoiceInterface = () => {
-  const [sessionStarted, setSessionStarted] = useState(false);
-  const { start, stop, status } = useConversation({
+  const { startSession, endSession, status } = useConversation({
     agentId: "2a7522ANd2N55s2EwS27WsoU", // Replace with your agent ID from ElevenLabs
     onMessage: (message) => {
       console.log(message);
@@ -17,15 +15,13 @@ const VoiceInterface = () => {
   });
 
   const handleToggleConversation = async () => {
-    if (sessionStarted) {
-      stop();
-      setSessionStarted(false);
+    if (status === 'connected') {
+      await endSession();
     } else {
       try {
         // Request microphone access
         await navigator.mediaDevices.getUserMedia({ audio: true });
-        start();
-        setSessionStarted(true);
+        await startSession();
       } catch (error) {
         console.error("Microphone access denied:", error);
         alert("Microphone access is required to start the conversation.");
@@ -45,7 +41,7 @@ const VoiceInterface = () => {
       <Button
         onClick={handleToggleConversation}
         className={`w-24 h-24 rounded-full flex items-center justify-center text-white transition-colors ${getButtonClass()}`}
-        aria-label={sessionStarted ? "Stop conversation" : "Start conversation"}
+        aria-label={status === 'connected' ? "Stop conversation" : "Start conversation"}
       >
         <Mic size={48} />
       </Button>
