@@ -12,7 +12,7 @@ import { AuthGuard } from "./components/auth/AuthGuard";
 import LandingPage from "./pages/Landing";
 import AppLayout from "./components/layout/AppLayout";
 import Studio from "./pages/Studio";
-import TalkToEI from "./pages/TalkToEI";
+import ConversationalAI from "./pages/ConversationalAI";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +36,7 @@ const App = () => (
             >
               <Route index element={<Index />} />
               <Route path="studio" element={<Studio />} />
-              <Route path="talk-to-ei" element={<TalkToEI />} />
+              <Route path="conversational-ai" element={<ConversationalAI />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
