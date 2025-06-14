@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthProvider";
 import AuthPage from "./pages/Auth";
 import { AuthGuard } from "./components/auth/AuthGuard";
+import LandingPage from "./pages/Landing";
 
 const queryClient = new QueryClient();
 
@@ -20,9 +21,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route
-              path="/"
+              path="/app"
               element={
                 <AuthGuard>
                   <Index />

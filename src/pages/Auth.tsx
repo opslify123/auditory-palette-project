@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -26,12 +25,14 @@ const signUpSchema = z.object({
 const AuthPage = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (session) {
-      navigate("/");
+      const from = location.state?.from?.pathname || "/app";
+      navigate(from, { replace: true });
     }
-  }, [session, navigate]);
+  }, [session, navigate, location.state]);
 
   if (session) {
     return null; // or a loading spinner
@@ -57,6 +58,7 @@ const AuthPage = () => {
 
 const SignInForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -74,7 +76,8 @@ const SignInForm = () => {
       toast({ variant: "destructive", title: "Error signing in", description: error.message });
     } else {
       toast({ title: "Signed in successfully!" });
-      navigate("/");
+      const from = location.state?.from?.pathname || "/app";
+      navigate(from, { replace: true });
     }
   };
 
