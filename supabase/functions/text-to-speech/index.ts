@@ -32,7 +32,7 @@ serve(async (req) => {
   )
 
   try {
-    const { text, voiceId } = await req.json()
+    const { text, voiceId, voiceSettings } = await req.json()
 
     if (!text) {
       throw new Error('Text is required')
@@ -50,8 +50,10 @@ serve(async (req) => {
         text: text,
         model_id: 'eleven_multilingual_v2',
         voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.75,
+          stability: voiceSettings?.stability ?? 0.5,
+          similarity_boost: voiceSettings?.similarity_boost ?? 0.75,
+          style: voiceSettings?.style ?? 0,
+          use_speaker_boost: voiceSettings?.use_speaker_boost ?? true,
         },
       }),
     })

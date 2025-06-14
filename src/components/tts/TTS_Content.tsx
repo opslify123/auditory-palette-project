@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -9,9 +10,13 @@ import { voices } from '@/lib/voices';
 
 interface TTS_ContentProps {
     selectedVoiceId: string;
+    stability: number;
+    similarityBoost: number;
+    style: number;
+    useSpeakerBoost: boolean;
 }
 
-const TTS_Content = ({ selectedVoiceId }: TTS_ContentProps) => {
+const TTS_Content = ({ selectedVoiceId, stability, similarityBoost, style, useSpeakerBoost }: TTS_ContentProps) => {
     const [text, setText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [audioContent, setAudioContent] = useState<string | null>(null);
@@ -33,8 +38,19 @@ const TTS_Content = ({ selectedVoiceId }: TTS_ContentProps) => {
         setAudioContent(null);
 
         try {
+            const voiceSettings = {
+                stability,
+                similarity_boost: similarityBoost,
+                style,
+                use_speaker_boost: useSpeakerBoost,
+            };
+
             const { data, error } = await supabase.functions.invoke('text-to-speech', {
-                body: { text: text, voiceId: selectedVoiceId },
+                body: { 
+                    text: text, 
+                    voiceId: selectedVoiceId,
+                    voiceSettings
+                },
             });
 
             if (error) throw error;
