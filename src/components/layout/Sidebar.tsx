@@ -1,22 +1,23 @@
 
 import { Home, MessageSquare, Play, Wand2, Music, BookOpen, Sparkles, Radio, Bell, Bolt, User, ChevronDown, Plus, ChevronsLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   const menuItems = {
     main: [
-      { icon: Home, label: 'Home' },
-      { icon: MessageSquare, label: 'Voices' },
+      { icon: Home, label: 'Home', href: '/app', end: true },
+      { icon: MessageSquare, label: 'Voices', href: '#', end: false },
     ],
     playground: [
-      { icon: Play, label: 'Text to Speech' },
-      { icon: Wand2, label: 'Voice Changer' },
-      { icon: Music, label: 'Sound Effects' },
+      { icon: Play, label: 'Text to Speech', href: '/app', end: true },
+      { icon: Wand2, label: 'Voice Changer', href: '#', end: false },
+      { icon: Music, label: 'Sound Effects', href: '#', end: false },
     ],
     products: [
-      { icon: BookOpen, label: 'Studio' },
-      { icon: Sparkles, label: 'Dubbing' },
-      { icon: Radio, label: 'Conversational AI' },
+      { icon: BookOpen, label: 'Studio', href: '/app/studio', end: true },
+      { icon: Sparkles, label: 'Dubbing', href: '#', end: false },
+      { icon: Radio, label: 'Conversational AI', href: '#', end: false },
     ],
   };
 
@@ -34,31 +35,31 @@ const Sidebar = () => {
       <nav className="flex-1 space-y-4">
         <div>
           {menuItems.main.map((item, index) => (
-            <a key={index} href="#" className="flex items-center p-2 text-sm text-gray-300 rounded-md hover:bg-gray-700">
+            <NavLink key={index} to={item.href} end={item.end} className={({isActive}) => `flex items-center p-2 text-sm rounded-md ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700'}`}>
               <item.icon className="w-4 h-4 mr-3" />
               {item.label}
               {item.label === 'Voices' && <Plus className="w-4 h-4 ml-auto" />}
-            </a>
+            </NavLink>
           ))}
         </div>
         
         <div>
           <h3 className="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Playground</h3>
           {menuItems.playground.map((item, index) => (
-            <a key={index} href="#" className={`flex items-center p-2 text-sm rounded-md ${item.label === 'Text to Speech' ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700'}`}>
+            <NavLink key={index} to={item.href} end={item.end} className={({isActive}) => `flex items-center p-2 text-sm rounded-md ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700'}`}>
               <item.icon className="w-4 h-4 mr-3" />
               {item.label}
-            </a>
+            </NavLink>
           ))}
         </div>
 
         <div>
           <h3 className="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Products</h3>
           {menuItems.products.map((item, index) => (
-            <a key={index} href="#" className="flex items-center p-2 text-sm text-gray-300 rounded-md hover:bg-gray-700">
+             <NavLink key={index} to={item.href} end={item.end} className={({isActive}) => `flex items-center p-2 text-sm rounded-md ${isActive ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700'}`}>
               <item.icon className="w-4 h-4 mr-3" />
               {item.label}
-            </a>
+            </NavLink>
           ))}
         </div>
         

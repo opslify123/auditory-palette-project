@@ -1,6 +1,4 @@
-
 import { useState } from 'react';
-import Sidebar from '@/components/layout/Sidebar';
 import TTS_Content from '@/components/tts/TTS_Content';
 import SettingsPanel from '@/components/tts/SettingsPanel';
 import { voices } from '@/lib/voices';
@@ -13,29 +11,26 @@ const Index = () => {
   const [useSpeakerBoost, setUseSpeakerBoost] = useState(true);
 
   return (
-    <div className="flex h-full w-full bg-background text-foreground">
-      <Sidebar />
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-        <TTS_Content 
-          selectedVoiceId={selectedVoiceId}
-          stability={stability}
-          similarityBoost={similarityBoost}
-          style={style}
-          useSpeakerBoost={useSpeakerBoost}
-        />
-        <SettingsPanel 
-          selectedVoiceId={selectedVoiceId} 
-          setSelectedVoiceId={setSelectedVoiceId} 
-          stability={stability}
-          setStability={setStability}
-          similarityBoost={similarityBoost}
-          setSimilarityBoost={setSimilarityBoost}
-          style={style}
-          setStyle={setStyle}
-          useSpeakerBoost={useSpeakerBoost}
-          setUseSpeakerBoost={setUseSpeakerBoost}
-        />
-      </div>
+    <div className="flex-1 flex flex-col md:flex-row overflow-hidden h-full">
+      <TTS_Content 
+        selectedVoiceId={selectedVoiceId}
+        stability={stability}
+        similarityBoost={similarityBoost}
+        style={style}
+        useSpeakerBoost={useSpeakerBoost}
+      />
+      <SettingsPanel 
+        selectedVoiceId={selectedVoiceId} 
+        setSelectedVoiceId={setSelectedVoiceId} 
+        stability={stability}
+        setStability={setStability}
+        similarityBoost={similarityBoost}
+        setSimilarityBoost={setSimilarityBoost}
+        style={style}
+        setStyle={setStyle}
+        useSpeakerBoost={useSpeakerBoost}
+        setUseSpeakerBoost={setUseSpeakerBoost}
+      />
     </div>
   );
 };
