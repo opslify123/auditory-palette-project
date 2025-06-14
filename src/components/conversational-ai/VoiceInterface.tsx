@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useConversation } from '@11labs/react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -16,17 +16,17 @@ const VoiceInterface = () => {
             console.log('Message received:', msg);
             setMessages((prev) => [...prev, msg]);
         },
-        onError: (err) => {
+        onError: (err: any) => {
             console.error(err);
             toast({
                 title: "Conversation Error",
-                description: err.message,
+                description: err.message || "An unknown error occurred.",
                 variant: "destructive",
             });
         },
     });
 
-    const startConversation = async () => {
+    const startSession = async () => {
         setIsConnecting(true);
         try {
             await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -35,7 +35,7 @@ const VoiceInterface = () => {
             if (data.error) throw new Error(data.error);
 
             if (data.url) {
-                await conversation.startConversation({ url: data.url });
+                await conversation.startSession({ url: data.url });
             } else {
                 throw new Error("Could not get signed URL.");
             }
@@ -51,8 +51,8 @@ const VoiceInterface = () => {
         }
     };
 
-    const endConversation = async () => {
-        await conversation.endConversation();
+    const endSession = async () => {
+        await conversation.endSession();
         setMessages([]);
     };
 
@@ -74,11 +74,11 @@ const VoiceInterface = () => {
             <div className="p-4 border-t flex flex-col items-center justify-center space-y-4">
                  <div className="flex items-center justify-center space-x-4">
                     {conversation.status === 'connected' ? (
-                        <Button onClick={endConversation} variant="destructive" size="lg" className="rounded-full w-20 h-20">
+                        <Button onClick={endSession} variant="destructive" size="lg" className="rounded-full w-20 h-20">
                             <MicOff className="h-8 w-8" />
                         </Button>
                     ) : (
-                        <Button onClick={startConversation} size="lg" className="rounded-full w-20 h-20" disabled={isConnecting}>
+                        <Button onClick={startSession} size="lg" className="rounded-full w-20 h-20" disabled={isConnecting}>
                             {isConnecting ? <Loader2 className="animate-spin h-8 w-8" /> : <Mic className="h-8 w-8" />}
                         </Button>
                     )}
