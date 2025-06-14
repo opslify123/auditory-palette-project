@@ -35,7 +35,7 @@ const VoiceInterface = () => {
             if (data.error) throw new Error(data.error);
 
             if (data.url) {
-                await conversation.startSession({ url: data.url });
+                await conversation.start({ signedUrl: data.url });
             } else {
                 throw new Error("Could not get signed URL.");
             }
@@ -52,7 +52,7 @@ const VoiceInterface = () => {
     };
 
     const endSession = async () => {
-        await conversation.endSession();
+        await conversation.stop();
         setMessages([]);
     };
 
