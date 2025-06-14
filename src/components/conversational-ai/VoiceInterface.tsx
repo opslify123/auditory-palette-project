@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useConversation } from '@11labs/react';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,7 +34,7 @@ const VoiceInterface = () => {
             if (data.error) throw new Error(data.error);
 
             if (data.url) {
-                await conversation.start({ signedUrl: data.url });
+                await conversation.startSession({ url: data.url });
             } else {
                 throw new Error("Could not get signed URL.");
             }
@@ -52,7 +51,7 @@ const VoiceInterface = () => {
     };
 
     const endSession = async () => {
-        await conversation.stop();
+        await conversation.endSession();
         setMessages([]);
     };
 
