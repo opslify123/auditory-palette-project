@@ -1,7 +1,7 @@
-
 import { useConversation } from "@11labs/react";
 import { Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const VoiceInterface = () => {
   const { startSession, endSession, status } = useConversation({
@@ -11,6 +11,7 @@ const VoiceInterface = () => {
     },
     onError: (error) => {
       console.error(error);
+      toast.error("An error occurred during the conversation.");
     },
   });
 
@@ -24,7 +25,7 @@ const VoiceInterface = () => {
         await startSession();
       } catch (error) {
         console.error("Microphone access denied:", error);
-        alert("Microphone access is required to start the conversation.");
+        toast.error("Microphone access is required. Please grant permission in your browser.");
       }
     }
   };
