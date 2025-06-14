@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -6,12 +5,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { Download } from 'lucide-react';
+import { voices } from '@/lib/voices';
 
-const TTS_Content = () => {
+interface TTS_ContentProps {
+    selectedVoiceId: string;
+}
+
+const TTS_Content = ({ selectedVoiceId }: TTS_ContentProps) => {
     const [text, setText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [audioContent, setAudioContent] = useState<string | null>(null);
     const { toast } = useToast();
+
+    const selectedVoice = voices.find(v => v.id === selectedVoiceId) || voices[0];
 
     const handleGenerateSpeech = async () => {
         if (!text.trim()) {
@@ -28,7 +34,7 @@ const TTS_Content = () => {
 
         try {
             const { data, error } = await supabase.functions.invoke('text-to-speech', {
-                body: { text: text, voiceId: 'EXAVITQu4vr4xnSDxMaL' }, // Using Sarah's voice ID for consistency
+                body: { text: text, voiceId: selectedVoiceId },
             });
 
             if (error) throw error;
@@ -94,7 +100,7 @@ const TTS_Content = () => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                          </span>
-                         Sarah
+                         {selectedVoice.name}
                        </Badge>
                     </div>
                 </div>
