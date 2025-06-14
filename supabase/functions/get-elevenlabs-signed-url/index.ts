@@ -3,7 +3,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY')
 // IMPORTANT: Replace this with your own Agent ID from ElevenLabs
-const AGENT_ID = 'YOUR_ELEVENLABS_AGENT_ID'
+const AGENT_ID = 'agent_01jxrca0g8fgqrrc34xt0q3m9d'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
