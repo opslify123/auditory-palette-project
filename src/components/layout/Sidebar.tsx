@@ -17,7 +17,7 @@ const Sidebar = () => {
     products: [
       { icon: BookOpen, label: 'Studio', href: '/app/studio', end: true },
       { icon: Sparkles, label: 'Dubbing', href: '#', end: false },
-      { icon: Radio, label: 'Conversational AI', href: '#', end: false },
+      { icon: Radio, label: 'Conversational AI', href: '/app/conversational-ai', end: true },
     ],
   };
 
